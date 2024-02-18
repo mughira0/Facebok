@@ -4,6 +4,7 @@ import userModel from "../models/userModel.js";
  * ? Signup Controller
  **/
 export const handleSignUp = async (req, res) => {
+  // spem
   try {
     const { email, fullName, country, password, birthDate, gender } = req.body;
     const body = req.body;
