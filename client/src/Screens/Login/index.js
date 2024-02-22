@@ -25,7 +25,7 @@ const Login = () => {
     useState(false);
 
   const handleLogin = async () => {
-    const apiUrl = BaseUrl("login");
+    const apiUrl = BaseUrl("auth/login");
     const body = {
       email,
       password,
@@ -44,8 +44,6 @@ const Login = () => {
     if (response !== undefined) {
       await dispatch(authReducer(response?.data));
       toast.success("Login Successfully");
-      setEmail("");
-      setPassword("");
       navigate("/");
     }
     setIsLoading(false);

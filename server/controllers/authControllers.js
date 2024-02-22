@@ -1,12 +1,13 @@
 import bcrypt from "bcryptjs";
 import userModel from "../models/userModel.js";
+import { handleGenerateToken } from "../utils/utils.js";
 /**
  * ? Signup Controller
  **/
 export const handleSignUp = async (req, res) => {
   // spem
   try {
-    const { email, fullName, country, password, birthDate, gender } = req.body;
+    const { email, fullName, password, birthDate, gender } = req.body;
     const body = req.body;
     for (const key in body) {
       if (!body[key]) {
@@ -38,7 +39,7 @@ export const handleSignUp = async (req, res) => {
     const newUser = await userModel.create({
       email,
       fullName,
-      country,
+
       password: hashPassword,
       birthDate,
       gender,
@@ -51,7 +52,6 @@ export const handleSignUp = async (req, res) => {
         id: newUser?._id,
         email: newUser?.email,
         fullName: newUser?.fullName,
-        country: newUser?.country,
         birthDate: newUser?.birthDate,
         gender: newUser?.gender,
         profilePic: newUser?.profilePic,
@@ -70,14 +70,37 @@ export const handleSignUp = async (req, res) => {
 /**
  * ? Login Controller
  **/
-export const handleLoginUp = (req, res) => {
+export const handleLoginUp = async (req, res) => {
   try {
-    res.send({
+    const { email, password } = req.body;
+    console.log(req.body);
+    const user = await userModel.findOne({ email });
+    console.log(user);
+
+    if (!user) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid Credentials",
+      });
+    }
+    const samePassword = await bcrypt.compare(password, user?.password);
+    console.log(samePassword);
+    if (!samePassword) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid Credentialsssss",
+      });
+    }
+    console.log("567890");
+    const token = handleGenerateToken(user._id);
+    console.log(token);
+    res.status(200).send({
       status: true,
-      message: "Login Api",
+      user: user,
+      token: token,
     });
   } catch (err) {
-    res.send({
+    res.status(400).send({
       status: false,
       error: err,
     });

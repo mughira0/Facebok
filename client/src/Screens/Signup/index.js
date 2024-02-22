@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import PhoneInput from "react-phone-input-2";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Post } from "../../AxiosFunction/AxiosFunction";
 import Button from "../../Components/Button/Button";
+import DropDown from "../../Components/DropDown";
 import Input from "../../Components/Input/Input";
-import ProfileWithEditBtn from "../../Components/ProfileWithEditBtn";
 import { BaseUrl, validateEmail } from "../../Config/apiUrl";
 import { logo } from "../../Constant/ImagePath";
 import classes from "./Signup.module.css";
@@ -15,24 +14,21 @@ const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [role, setRole] = useState("student");
+  const [gender, setGender] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
   console.log(typeof avatarPreview, "rolerolerolerole");
   const handleSignup = async () => {
-    const apiUrl = BaseUrl("register");
+    const apiUrl = BaseUrl("auth/signup");
     const name = `${firstName} ${lastName}`;
     const body = {
-      name,
+      fullName: name,
       email,
-      phone: Number(phone),
-      role,
+      birthDate,
+      gender: gender.value,
       password,
-      avatar,
     };
     for (let key in body) {
       if (body[key] == "" || body[key] == null) {
@@ -50,22 +46,11 @@ const Signup = () => {
     if (body?.password?.length < 8) {
       return toast.error("Password Should be greater than 8 character");
     }
-    const myForm = new FormData();
-    myForm.append("name", body?.name);
-    myForm.append("email", body?.email);
-    myForm.append("phone", body?.phone);
-    myForm.append("role", body?.role);
-    myForm.append("password", body?.password);
-    myForm.append("avatar", body?.avatar);
     setIsLoading(true);
-    const response = await Post(apiUrl, myForm);
+    const response = await Post(apiUrl, body);
     if (response !== undefined) {
       toast.success("Signup Successfully");
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
+
       navigate("/login");
     }
     setIsLoading(false);
@@ -110,38 +95,6 @@ const Signup = () => {
 
           <h2>Signup Now!</h2>
           <Row className={"gy-4"}>
-            <Col md={12}>
-              <div className={classes.roleMain}>
-                <span>
-                  <input
-                    onChange={() => setRole("student")}
-                    type={"radio"}
-                    name={"role"}
-                    checked={role == "student"}
-                  />
-                  As a Student
-                </span>
-                |
-                <span>
-                  <input
-                    onChange={() => setRole("tutor")}
-                    type={"radio"}
-                    name={"role"}
-                  />
-                  As a Tutor
-                </span>
-              </div>
-            </Col>
-            <Col md={12}>
-              <ProfileWithEditBtn
-                setAvatar={setAvatar}
-                setAvatarPreview={setAvatarPreview}
-                avatarPreview={avatarPreview}
-              />
-              <p className="mt-3">
-                Upload Your profile picture(max file size: 50 KB)
-              </p>
-            </Col>
             <Col xl={6} lg={12}>
               <Input
                 setter={setFirstName}
@@ -159,6 +112,15 @@ const Signup = () => {
               />
             </Col>
             <Col xl={6} lg={12}>
+              <Input
+                setter={setBirthDate}
+                value={birthDate}
+                type={"date"}
+                label={"Birth Date"}
+                placeholder={"Birth Date"}
+              />
+            </Col>
+            {/* <Col xl={6} lg={12}>
               <div className={classes.phoneInputMain}>
                 <label>Phone</label>
                 <PhoneInput
@@ -168,7 +130,7 @@ const Signup = () => {
                   onChange={(phone) => setPhone(String(phone))}
                 />
               </div>
-            </Col>
+            </Col> */}
             <Col xl={6} lg={12}>
               <Input
                 setter={setEmail}
@@ -194,6 +156,18 @@ const Signup = () => {
                 type={"password"}
                 label={"Confirm Password"}
                 placeholder={"Confirm Password"}
+              />
+            </Col>
+            <Col md={12}>
+              <DropDown
+                setter={setGender}
+                value={gender}
+                option={[
+                  { label: "Male", value: "male" },
+                  { label: "Female", value: "Female" },
+                ]}
+                label={"Gender"}
+                placeholder={"Gender"}
               />
             </Col>
             <Col md={12}>

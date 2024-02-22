@@ -35,8 +35,8 @@ const DesktopNavbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [errorShowModa, setErrorShowModa] = useState(false);
   const [errorShowModa2, setErrorShowModa2] = useState(false);
-  // const isLogin = useSelector((state) => state?.authReducer?.isLogin);
-  const isLogin = true;
+  const isLogin = useSelector((state) => state?.authReducer?.isLogin);
+  // const isLogin = true;
   const userData = useSelector((state) => state?.authReducer?.user);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
