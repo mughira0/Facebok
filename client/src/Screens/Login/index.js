@@ -143,7 +143,7 @@ const Login = () => {
               <div className={classes.btnMain}>
                 <Button
                   disabled={isLoading}
-                  onClick={handleLogin}
+                  onClick={() => handleLogin()}
                   label={isLoading ? "Loading..." : "LOGIN"}
                 />
               </div>

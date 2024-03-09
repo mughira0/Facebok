@@ -164,7 +164,7 @@ const Signup = () => {
                 value={gender}
                 option={[
                   { label: "Male", value: "male" },
-                  { label: "Female", value: "Female" },
+                  { label: "Female", value: "female" },
                 ]}
                 label={"Gender"}
                 placeholder={"Gender"}
@@ -174,7 +174,7 @@ const Signup = () => {
               <div className={classes.btnMain}>
                 <Button
                   disabled={isLoading}
-                  onClick={handleSignup}
+                  onClick={() => handleSignup()}
                   label={isLoading ? "Loading..." : "SIGNUP"}
                 />
               </div>

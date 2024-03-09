@@ -71,7 +71,7 @@ const DesktopNavbar = () => {
             <ul>
               <li>
                 <Link className={location == "/" && classes.activeClass} to="/">
-                  Men's Collections
+                  Home
                 </Link>
               </li>
               <li>
