@@ -94,6 +94,7 @@ export const handleLoginUp = async (req, res) => {
     console.log("567890");
     const token = handleGenerateToken(user._id);
     console.log(token);
+    delete user?.password;
     res.status(200).send({
       status: true,
       user: user,
